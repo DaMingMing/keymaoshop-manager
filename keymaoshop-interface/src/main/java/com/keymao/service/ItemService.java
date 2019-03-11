@@ -5,7 +5,7 @@ import com.keymao.common.utils.E3Result;
 import com.keymao.pojo.TbItem;
 
 /**
- * 商品接口类
+ * 商品接口
  */
 public interface ItemService {
     /**
