@@ -23,5 +23,32 @@ public interface ItemService {
      */
     public EasyUIDataGridResult getItemList(int page, int rows);
 
+    /**
+     * 新增商品
+     * @param item 商品信息
+     * @param desc 商品描述
+     * @return
+     */
     public E3Result addItem(TbItem item, String desc) ;
+
+    /**
+     * 批量删除商品
+     * @param ids 商品id，以英文逗号分割
+     * @return
+     */
+    public E3Result deleteItems(String ids) ;
+
+    /**
+     * 批量上架商品
+     * @param ids 商品id，以英文逗号分割
+     * @return
+     */
+    public E3Result reshelfItems(String ids) ;
+
+    /**
+     * 批量下架商品
+     * @param ids 商品id，以英文逗号分割
+     * @return
+     */
+    public E3Result instockItems(String ids) ;
 }

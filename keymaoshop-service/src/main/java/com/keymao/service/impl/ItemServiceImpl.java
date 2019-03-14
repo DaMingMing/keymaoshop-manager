@@ -96,5 +96,65 @@ public class ItemServiceImpl implements ItemService {
         return E3Result.ok();
 	}
 
+	@Override
+	public E3Result deleteItems(String ids) {
+		if(null == ids || "".equals(ids)) {
+		    return E3Result.build(500,"'删除失败，请选择商品！",null);
+        }
+        StringBuffer msg = null;
+        String arrId[] = ids.split(",");
+        Long id = 0l;
+		TbItem item = null;
+		for(int i = 0;i < arrId.length;i++) {
+            id = Long.parseLong(arrId[i]);
+            item = new TbItem();
+            item.setId(id);
+            item.setStatus((byte) 3);
+            item.setUpdated(new Date());
+			itemMapper.updateByPrimaryKeySelective(item);
+        }
+		return E3Result.ok();
+	}
+
+	@Override
+	public E3Result reshelfItems(String ids) {
+		if(null == ids || "".equals(ids)) {
+			return E3Result.build(500,"'上架失败，请选择商品！",null);
+		}
+		StringBuffer msg = null;
+		String arrId[] = ids.split(",");
+		Long id = 0l;
+		TbItem item = null;
+		for(int i = 0;i < arrId.length;i++) {
+			id = Long.parseLong(arrId[i]);
+			item = new TbItem();
+			item.setId(id);
+			item.setStatus((byte) 1);
+			item.setUpdated(new Date());
+			itemMapper.updateByPrimaryKeySelective(item);
+		}
+		return E3Result.ok();
+	}
+
+	@Override
+	public E3Result instockItems(String ids) {
+		if(null == ids || "".equals(ids)) {
+			return E3Result.build(500,"'下架失败，请选择商品！",null);
+		}
+		StringBuffer msg = null;
+		String arrId[] = ids.split(",");
+		Long id = 0l;
+		TbItem item = null;
+		for(int i = 0;i < arrId.length;i++) {
+			id = Long.parseLong(arrId[i]);
+			item = new TbItem();
+			item.setId(id);
+			item.setStatus((byte) 2);
+			item.setUpdated(new Date());
+			itemMapper.updateByPrimaryKeySelective(item);
+		}
+		return E3Result.ok();
+	}
+
 
 }
