@@ -101,7 +101,6 @@ public class ItemServiceImpl implements ItemService {
 		if(null == ids || "".equals(ids)) {
 		    return E3Result.build(500,"'删除失败，请选择商品！",null);
         }
-        StringBuffer msg = null;
         String arrId[] = ids.split(",");
         Long id = 0l;
 		TbItem item = null;
@@ -121,7 +120,6 @@ public class ItemServiceImpl implements ItemService {
 		if(null == ids || "".equals(ids)) {
 			return E3Result.build(500,"'上架失败，请选择商品！",null);
 		}
-		StringBuffer msg = null;
 		String arrId[] = ids.split(",");
 		Long id = 0l;
 		TbItem item = null;
@@ -141,7 +139,6 @@ public class ItemServiceImpl implements ItemService {
 		if(null == ids || "".equals(ids)) {
 			return E3Result.build(500,"'下架失败，请选择商品！",null);
 		}
-		StringBuffer msg = null;
 		String arrId[] = ids.split(",");
 		Long id = 0l;
 		TbItem item = null;
