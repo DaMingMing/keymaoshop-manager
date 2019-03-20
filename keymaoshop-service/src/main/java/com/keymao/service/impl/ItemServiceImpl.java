@@ -104,7 +104,8 @@ public class ItemServiceImpl implements ItemService {
         String arrId[] = ids.split(",");
         Long id = 0l;
 		TbItem item = null;
-		for(int i = 0;i < arrId.length;i++) {
+        int length = arrId.length;
+        for(int i = 0;i < length;i++) {
             id = Long.parseLong(arrId[i]);
             item = new TbItem();
             item.setId(id);
@@ -123,7 +124,8 @@ public class ItemServiceImpl implements ItemService {
 		String arrId[] = ids.split(",");
 		Long id = 0l;
 		TbItem item = null;
-		for(int i = 0;i < arrId.length;i++) {
+        int length = arrId.length;
+        for(int i = 0;i < length;i++) {
 			id = Long.parseLong(arrId[i]);
 			item = new TbItem();
 			item.setId(id);
@@ -142,7 +144,8 @@ public class ItemServiceImpl implements ItemService {
 		String arrId[] = ids.split(",");
 		Long id = 0l;
 		TbItem item = null;
-		for(int i = 0;i < arrId.length;i++) {
+        int length = arrId.length;
+		for(int i = 0;i < length;i++) {
 			id = Long.parseLong(arrId[i]);
 			item = new TbItem();
 			item.setId(id);
