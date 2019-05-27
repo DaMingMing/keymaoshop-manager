@@ -39,7 +39,7 @@ public class ActiveMqTest {
 
     @Test
     public void testQueueConsumer() throws Exception {
-        // 第一步：创建一个ConnectionFactory对象。
+  /*      // 第一步：创建一个ConnectionFactory对象。
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.27.101:61616");
         // 第二步：从ConnectionFactory对象中获得一个Connection对象。
         Connection connection = connectionFactory.createConnection();
@@ -73,7 +73,7 @@ public class ActiveMqTest {
         // 第九步：关闭资源
         consumer.close();
         session.close();
-        connection.close();
+        connection.close();*/
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ActiveMqTest {
 
     @Test
     public void testTopicConsumer() throws Exception {
-        // 第一步：创建一个ConnectionFactory对象。
+/*        // 第一步：创建一个ConnectionFactory对象。
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://192.168.27.101:61616");
         // 第二步：从ConnectionFactory对象中获得一个Connection对象。
         Connection connection = connectionFactory.createConnection();
@@ -146,7 +146,7 @@ public class ActiveMqTest {
         // 第九步：关闭资源
         consumer.close();
         session.close();
-        connection.close();
+        connection.close();*/
     }
 
 
