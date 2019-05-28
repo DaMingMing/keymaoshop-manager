@@ -13,6 +13,8 @@ import com.keymao.mapper.TbContentCategoryMapper;
 import com.keymao.mapper.TbItemDescMapper;
 import com.keymao.pojo.TbItemDesc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.keymao.mapper.TbItemMapper;
@@ -20,6 +22,9 @@ import com.keymao.pojo.TbItem;
 import com.keymao.pojo.TbItemExample;
 import com.keymao.pojo.TbItemExample.Criteria;
 import com.keymao.service.ItemService;
+
+import javax.annotation.Resource;
+import javax.jms.*;
 
 
 /**
@@ -32,6 +37,10 @@ public class ItemServiceImpl implements ItemService {
 	private TbItemMapper itemMapper;
 	@Autowired
 	private TbItemDescMapper itemDescMapper;
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	@Resource
+	private Destination topicDestination;
 
 	@Override
 	public TbItem getItemById(long id) {
@@ -73,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public E3Result addItem(TbItem item, String desc) {
         // 1、生成商品id
-        long itemId = IDUtils.genItemId();
+        final long itemId = IDUtils.genItemId();
         // 2、补全TbItem对象的属性
         item.setId(itemId);
         //商品状态，1-正常，2-下架，3-删除
@@ -92,7 +101,17 @@ public class ItemServiceImpl implements ItemService {
         itemDesc.setUpdated(date);
         // 6、向商品描述表插入数据
         itemDescMapper.insert(itemDesc);
-        // 7、E3Result.ok()
+		//7、发送商品添加消息给MQ
+		//使用JmsTemplate对象发送消息。
+		jmsTemplate.send(topicDestination, new MessageCreator() {
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				//创建一个消息对象并返回
+				TextMessage textMessage = session.createTextMessage(itemId + "");
+				return textMessage;
+			}
+		});
+        // 8、E3Result.ok()
         return E3Result.ok();
 	}
 
