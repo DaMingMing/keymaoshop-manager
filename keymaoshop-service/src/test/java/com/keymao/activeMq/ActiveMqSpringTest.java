@@ -23,7 +23,7 @@ public class ActiveMqSpringTest {
             @Override
             public Message createMessage(Session session) throws JMSException {
                 //创建一个消息对象并返回
-                TextMessage textMessage = session.createTextMessage("spring activemq queue message");
+                TextMessage textMessage = session.createTextMessage("spring activemq queue message1");
                 return textMessage;
             }
         });
