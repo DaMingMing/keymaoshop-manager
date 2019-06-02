@@ -62,6 +62,12 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
+	public TbItemDesc getItemDescById(long id) {
+		TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(id);
+		return itemDesc;
+	}
+
+	@Override
 	public EasyUIDataGridResult getItemList(int page, int rows) {
 		//设置分页信息
 		PageHelper.startPage(page, rows);
