@@ -3,6 +3,7 @@ package com.keymao.service;
 import com.keymao.common.pojo.EasyUIDataGridResult;
 import com.keymao.common.utils.E3Result;
 import com.keymao.pojo.TbItem;
+import com.keymao.pojo.TbItemDesc;
 
 /**
  * 商品接口
@@ -14,6 +15,13 @@ public interface ItemService {
      * @return
      */
 	public TbItem getItemById(long id);
+
+    /**
+     * 根据id获取描述
+     * @param id
+     * @return
+     */
+    public TbItemDesc getItemDescById(long id);
 
     /**
      * 获取商品列表，获取第page页，rows条内容，默认查询总数count
