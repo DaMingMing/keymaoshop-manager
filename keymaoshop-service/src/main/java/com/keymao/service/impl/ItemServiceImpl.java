@@ -2,17 +2,19 @@ package com.keymao.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.keymao.common.jedis.JedisClient;
 import com.keymao.common.pojo.EasyUIDataGridResult;
 import com.keymao.common.utils.E3Result;
 import com.keymao.common.utils.IDUtils;
-import com.keymao.mapper.TbContentCategoryMapper;
+import com.keymao.common.utils.JsonUtils;
 import com.keymao.mapper.TbItemDescMapper;
 import com.keymao.pojo.TbItemDesc;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -41,9 +43,29 @@ public class ItemServiceImpl implements ItemService {
 	private JmsTemplate jmsTemplate;
 	@Resource
 	private Destination topicDestination;
+	@Autowired
+	private JedisClient jedisClient;
+    @Value("${ITEM_INFO_PRE}")
+    private String ITEM_INFO_PRE;
+    @Value("${ITEM_INFO_EXPIRE}")
+    private Integer ITEM_INFO_EXPIRE;
+
+    //TODO
+    //缓存同步
 
 	@Override
 	public TbItem getItemById(long id) {
+		try {
+			//查询缓存
+			String json = jedisClient.get(ITEM_INFO_PRE + ":" + id + ":BASE");
+			if (StringUtils.isNotBlank(json)) {
+				//把json转换为java对象
+				TbItem item = JsonUtils.jsonToPojo(json, TbItem.class);
+				return item;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//根据主键查询
 		//TbItem item = itemMapper.selectByPrimaryKey(id);
 		
@@ -55,7 +77,17 @@ public class ItemServiceImpl implements ItemService {
 		//执行查询
 		List<TbItem> list = itemMapper.selectByExample(example);
 		if(list != null && list.size() > 0) {
-			return list.get(0);
+			//return
+            TbItem item = list.get(0);
+            try {
+				//把数据保存到缓存
+				jedisClient.set(ITEM_INFO_PRE + ":" + id + ":BASE", JsonUtils.objectToJson(item));
+				//设置缓存的有效期
+				jedisClient.expire(ITEM_INFO_PRE + ":" + id + ":BASE", ITEM_INFO_EXPIRE);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return item;
 		}
 		return null;
 		//return item;
@@ -63,7 +95,26 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public TbItemDesc getItemDescById(long id) {
+        try {
+            //查询缓存
+            String json = jedisClient.get(ITEM_INFO_PRE + ":" + id + ":DESC");
+            if (StringUtils.isNotBlank(json)) {
+                //把json转换为java对象
+                TbItemDesc tbItemDesc = JsonUtils.jsonToPojo(json, TbItemDesc.class);
+                return tbItemDesc;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		TbItemDesc itemDesc = itemDescMapper.selectByPrimaryKey(id);
+        try {
+            //把数据保存到缓存
+            jedisClient.set(ITEM_INFO_PRE + ":" + id + ":DESC", JsonUtils.objectToJson(itemDesc));
+            //设置缓存的有效期
+            jedisClient.expire(ITEM_INFO_PRE + ":" + id + ":DESC", ITEM_INFO_EXPIRE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		return itemDesc;
 	}
 
